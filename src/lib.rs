@@ -211,6 +211,29 @@ pub enum NumberOrString {
     String(String),
 }
 
+impl std::fmt::Display for NumberOrString {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            NumberOrString::Number(n) => write!(f, "{}", n),
+            NumberOrString::String(s) => write!(f, "{}", s),
+        }
+    }
+}
+
+impl NumberOrString {
+    pub fn to_string(&self) -> String {
+        match self {
+            NumberOrString::Number(n) => n.to_string(),
+            NumberOrString::String(s) => s.clone(),
+        }
+    }
+
+    pub fn from_string(s: String) -> Self {
+        s.parse()
+            .map_or(NumberOrString::String(s), NumberOrString::Number)
+    }
+}
+
 /* ----------------- Cancel support ----------------- */
 
 #[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
